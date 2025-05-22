@@ -1,122 +1,184 @@
-(function() {
-    if (document.getElementById("bloopanel")) return;
+(() => {
+  const blooxMenu = document.createElement('div');
+  blooxMenu.id = 'bloox-menu';
+  blooxMenu.innerHTML = `
+    <div id="bloox-header">BlooX Cheats</div>
+    <div id="bloox-tabs">
+      <button data-tab="global">Global</button>
+      <button data-tab="gold">Gold Quest</button>
+      <button data-tab="cafe">Cafe</button>
+      <button data-tab="crypto">Crypto Hack</button>
+    </div>
+    <div id="bloox-content">
+      <div class="tab-content" id="global">
+        <button id="add-tokens">Add Max Rewards</button>
+      </div>
+      <div class="tab-content" id="gold">
+        <button id="gold-cheat">Gold Hack</button>
+      </div>
+      <div class="tab-content" id="cafe">
+        <button id="cafe-hack">Infinite Food</button>
+      </div>
+      <div class="tab-content" id="crypto">
+        <button id="crypto-hack">Auto Farm</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(blooxMenu);
 
-    const style = document.createElement("style");
-    style.innerHTML = `
-    #bloopanel {
-        position: fixed;
-        top: 100px;
-        left: 100px;
-        width: 350px;
-        background: rgba(30, 30, 40, 0.9);
-        backdrop-filter: blur(8px);
-        border: 1px solid #555;
-        border-radius: 12px;
-        color: white;
-        font-family: 'Segoe UI', sans-serif;
-        z-index: 9999;
-        box-shadow: 0 0 15px rgba(0,0,0,0.4);
-        overflow: hidden;
-        user-select: none;
+  const style = document.createElement('style');
+  style.textContent = `
+    #bloox-menu {
+      position: fixed;
+      top: 100px;
+      left: 100px;
+      width: 300px;
+      background: #1e1e2f;
+      color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #000;
+      font-family: sans-serif;
+      z-index: 9999;
+      transition: transform 0.3s ease;
     }
-    #bloopanel-header {
-        background: linear-gradient(135deg, #00c6ff, #0072ff);
-        padding: 12px;
-        cursor: move;
-        font-weight: bold;
-        font-size: 18px;
-        border-bottom: 1px solid #444;
+    #bloox-header {
+      background: #0bc2cf;
+      padding: 10px;
+      cursor: move;
+      font-weight: bold;
+      text-align: center;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
     }
-    .bloo-tabs {
-        display: flex;
-        background: #222;
-        border-bottom: 1px solid #444;
+    #bloox-tabs {
+      display: flex;
+      justify-content: space-around;
+      background: #2e2e3f;
     }
-    .bloo-tab {
-        flex: 1;
-        padding: 10px;
-        text-align: center;
-        cursor: pointer;
-        transition: background 0.3s;
+    #bloox-tabs button {
+      flex: 1;
+      padding: 10px;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
     }
-    .bloo-tab:hover {
-        background: #333;
+    #bloox-tabs button:hover {
+      background: #3e3e5f;
     }
-    .bloo-tab.active {
-        background: #0072ff;
+    #bloox-content {
+      padding: 10px;
     }
-    .bloo-content {
-        padding: 15px;
-        display: none;
-        animation: fadeIn 0.3s ease;
+    .tab-content {
+      display: none;
     }
-    .bloo-content.active {
-        display: block;
+    .tab-content.active {
+      display: block;
     }
-    .bloo-toggle {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 6px 0;
+    #bloox-content button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #0bc2cf;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    .bloo-toggle input {
-        accent-color: #00ffcc;
-        transform: scale(1.2);
+    #bloox-content button:hover {
+      background: #09a2af;
     }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .bloox-notification {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #0bc2cf;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: Arial,sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    `;
-    document.head.appendChild(style);
+  `;
+  document.head.appendChild(style);
 
-    const panel = document.createElement("div");
-    panel.id = "bloopanel";
-    panel.innerHTML = `
-        <div id="bloopanel-header">🧠 BlooX Cheat Panel</div>
-        <div class="bloo-tabs">
-            <div class="bloo-tab active" data-tab="main">Main</div>
-            <div class="bloo-tab" data-tab="game">Game</div>
-            <div class="bloo-tab" data-tab="visuals">Visuals</div>
-        </div>
-        <div class="bloo-content active" id="tab-main">
-            <div class="bloo-toggle"><span>Auto Answer</span><input type="checkbox" id="autoAnswer"></div>
-            <div class="bloo-toggle"><span>Instant Win</span><input type="checkbox" id="instaWin"></div>
-        </div>
-        <div class="bloo-content" id="tab-game">
-            <div class="bloo-toggle"><span>Infinite Tokens</span><input type="checkbox" id="infiniteTokens"></div>
-            <div class="bloo-toggle"><span>Remove Timer</span><input type="checkbox" id="removeTimer"></div>
-        </div>
-        <div class="bloo-content" id="tab-visuals">
-            <div class="bloo-toggle"><span>ESP</span><input type="checkbox" id="esp"></div>
-            <div class="bloo-toggle"><span>Glow Blooks</span><input type="checkbox" id="glowBlooks"></div>
-        </div>
-    `;
-    document.body.appendChild(panel);
+  // draggable menu
+  let isDragging = false;
+  let offsetX, offsetY;
+  const header = document.getElementById('bloox-header');
+  header.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - blooxMenu.offsetLeft;
+    offsetY = e.clientY - blooxMenu.offsetTop;
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      blooxMenu.style.left = `${e.clientX - offsetX}px`;
+      blooxMenu.style.top = `${e.clientY - offsetY}px`;
+    }
+  });
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
 
-    // tab logic
-    document.querySelectorAll(".bloo-tab").forEach(tab => {
-        tab.onclick = () => {
-            document.querySelectorAll(".bloo-tab").forEach(t => t.classList.remove("active"));
-            document.querySelectorAll(".bloo-content").forEach(c => c.classList.remove("active"));
-            tab.classList.add("active");
-            document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
-        };
+  // tab switcher
+  const tabs = document.querySelectorAll('#bloox-tabs button');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      contents.forEach(c => c.classList.remove('active'));
+      document.getElementById(tab.dataset.tab).classList.add('active');
     });
+  });
+  tabs[0].click(); // default tab
 
-    // draggable
-    const header = document.getElementById("bloopanel-header");
-    let isDown = false, offsetX = 0, offsetY = 0;
+  // notification system
+  function showNotification(msg) {
+    const notif = document.createElement('div');
+    notif.className = 'bloox-notification';
+    notif.innerText = msg;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.style.opacity = '1', 100);
+    setTimeout(() => {
+      notif.style.opacity = '0';
+      setTimeout(() => notif.remove(), 500);
+    }, 3000);
+  }
 
-    header.addEventListener("mousedown", (e) => {
-        isDown = true;
-        offsetX = e.clientX - panel.offsetLeft;
-        offsetY = e.clientY - panel.offsetTop;
+  // run hosted script
+  function runRemoteScript(url, onSuccess) {
+    fetch(url)
+      .then(res => res.text())
+      .then(code => {
+        eval(code);
+        onSuccess && onSuccess();
+      })
+      .catch(err => {
+        console.error('Failed to load remote script:', err);
+        showNotification('❌ Failed to load script');
+      });
+  }
+
+  // cheats
+  document.getElementById('add-tokens').addEventListener('click', () => {
+    showNotification('⏳ Loading Add Rewards...');
+    runRemoteScript('https://raw.githubusercontent.com/BlueDragon7327/BlooX/refs/heads/main/Global/addrewards.js', () => {
+      showNotification('✅ Add Rewards executed!');
     });
-    document.addEventListener("mouseup", () => isDown = false);
-    document.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        panel.style.left = `${e.clientX - offsetX}px`;
-        panel.style.top = `${e.clientY - offsetY}px`;
-    });
+  });
+
+  document.getElementById('gold-cheat').addEventListener('click', () => {
+    showNotification('💰 Gold cheat activated!');
+  });
+
+  document.getElementById('cafe-hack').addEventListener('click', () => {
+    showNotification('☕ Infinite food toggled!');
+  });
+
+  document.getElementById('crypto-hack').addEventListener('click', () => {
+    showNotification('📈 Crypto auto farm on!');
+  });
 })();
